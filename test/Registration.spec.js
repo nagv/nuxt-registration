@@ -61,7 +61,7 @@ describe("Registration", () => {
     });
 
     describe("when no validation issues with full name ", () => {
-      test("to display validation message for full name", async () => {
+      test("to display Registration submit message", async () => {
         const wrapper = mount(Registration);
 
         await wrapper.find('input[type="text"]').setValue("abcd");
@@ -95,7 +95,7 @@ describe("Registration", () => {
     });
 
     describe("when No validation issues with message field ", () => {
-      test("to display validation error", async () => {
+      test("to display Registration submit message", async () => {
         const wrapper = mount(Registration);
 
         await wrapper.find('input[type="text"]').setValue("abcd");

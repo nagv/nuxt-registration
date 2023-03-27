@@ -4,7 +4,7 @@
           <form @submit.prevent="handleSubmit">
               <div class="form-group">
                   <label for="fullName">Full name:</label>
-                  <input type="text" id="fullName" v-model="name" :rules="fullNameRules">
+                  <input type="text" id="fullName" v-model="name">
               </div>
               
               <div class="form-group">
@@ -13,8 +13,8 @@
               </div>
 
               <div class="form-group">
-                  <label for="massage">Massage:</label>
-                  <textarea id="massage" rows="5" v-model="message"></textarea>
+                  <label for="message">Message:</label>
+                  <textarea id="message" rows="5" v-model="message"></textarea>
               </div>
 
               <button type="submit">Submit</button>
@@ -22,10 +22,7 @@
       </div>
 
       <div>
-          <p>Result</p>
-          <p>Name: {{ name }}</p>
-          <p>Email: {{ email }}</p>
-          <p>Massage: {{ message }}</p>
+          <p>Error Massage: {{ errorMessage }}</p>
       </div>
   </section>
 </template>
@@ -44,11 +41,24 @@ data() {
         },
       ],
         email: '',
-        message: ''
+        message: '',
+        errorMessage:''
     }
 },
 methods: {
   handleSubmit() {
+
+    if(this.name && this.name.length<3){
+      this.errorMessage = 'Full name must be at least 3 characters.'
+
+    }
+
+    if(this.message && this.message.length<10){
+      this.errorMessage = 'Message should be 3 characters.'
+
+    }
+
+
     let userMessage = {
       name: this.name,
       email: this.email,

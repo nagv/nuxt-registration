@@ -1,56 +1,113 @@
-import { mount } from '@vue/test-utils'
-import Registration from '@/components/Registration.vue'
+import { mount } from "@vue/test-utils";
+import Registration from "@/components/Registration.vue";
 
-describe('Registration', () => {
-  test('is a Vue instance', () => {
-    const wrapper = mount(Registration)
-    expect(wrapper.vm).toBeTruthy()
-  })
+describe("Registration", () => {
+  describe("When component is loaded", () => {
+    test("Make sure Vue Component to be available", () => {
+      const wrapper = mount(Registration);
+      expect(wrapper.vm).toBeTruthy();
+    });
 
-  test('Make sure input text present in the form', () => {
+    test("Make sure input text present in the form", () => {
+      const wrapper = mount(Registration);
 
-    const wrapper = mount(Registration)
-    
-    const textInput = wrapper.find('input[type="text"]')
+      const textInput = wrapper.find('input[type="text"]');
 
-    expect(textInput.exists()).toBe(true)
-  })
+      expect(textInput.exists()).toBe(true);
+    });
 
+    test("Make sure email input present in the form", () => {
+      const wrapper = mount(Registration);
 
-  test('Make sure email input present in the form', () => {
+      const emailInput = wrapper.find('input[type="email"]');
 
-    const wrapper = mount(Registration)
+      expect(emailInput.exists()).toBe(true);
+    });
 
-    //const fullname = wrapper.find('#fullName')
+    test("Make sure text area is present in the form", () => {
+      const wrapper = mount(Registration);
 
-    //expect(fullname.exists()).toBe(true)
+      const textAreaInput = wrapper.find("textArea");
 
-    //expect(fullname.element.id).toBe('fullName')
+      expect(textAreaInput.exists()).toBe(true);
+    });
 
+    test("Make sure a button is present in the form", () => {
+      const wrapper = mount(Registration);
 
-    
+      const submit = wrapper.find('button[type="submit"]');
 
-    const emailInput = wrapper.find('input[type="email"]')
+      expect(submit.exists()).toBe(true);
+    });
+  });
 
-    expect(emailInput.exists()).toBe(true)
+  describe("when registration form is submiited ", () => {
+    describe("when full name validation is failing ", () => {
+      test("to display validation message for full name", async () => {
+        const wrapper = mount(Registration);
 
+        await wrapper.find('input[type="text"]').setValue("ab");
 
-    
+        await wrapper.find('input[type="email"]').setValue("abcd@gmail.com");
 
-  
+        await wrapper.find("textArea").setValue("123456789010");
 
+        await wrapper.find("form").trigger("submit.prevent");
 
-    //const firstName = wrapper.find({name:'v-text-field'});
-    
-       // expect(firstName.name()).toBe(true)
-  })
+        expect(wrapper.find(".result").text()).toBe(
+          "Full name must be at least 3 characters."
+        );
+      });
+    });
 
-  test('Make sure text area is present in the form', () => {
+    describe("when no validation issues with full name ", () => {
+      test("to display validation message for full name", async () => {
+        const wrapper = mount(Registration);
 
-    const wrapper = mount(Registration)
-    
-    const textAreaInput = wrapper.find('textArea')
+        await wrapper.find('input[type="text"]').setValue("abcd");
 
-    expect(textAreaInput.exists()).toBe(true)
-  })
-})
+        await wrapper.find('input[type="email"]').setValue("abcd@gmail.com");
+
+        await wrapper.find("textArea").setValue("123456789010");
+
+        await wrapper.find("form").trigger("submit.prevent");
+
+        expect(wrapper.find(".result").text()).toBe("Registration submitted");
+      });
+    });
+
+    describe("when validation issues with message field ", () => {
+      test("to display validation error", async () => {
+        const wrapper = mount(Registration);
+
+        await wrapper.find('input[type="text"]').setValue("abcd");
+
+        await wrapper.find('input[type="email"]').setValue("abcd@gmail.com");
+
+        await wrapper.find("textArea").setValue("12345678");
+
+        await wrapper.find("form").trigger("submit.prevent");
+
+        expect(wrapper.find(".result").text()).toBe(
+          "Message should be 10 characters."
+        );
+      });
+    });
+
+    describe("when No validation issues with message field ", () => {
+      test("to display validation error", async () => {
+        const wrapper = mount(Registration);
+
+        await wrapper.find('input[type="text"]').setValue("abcd");
+
+        await wrapper.find('input[type="email"]').setValue("abcd@gmail.com");
+
+        await wrapper.find("textArea").setValue("123456789089");
+
+        await wrapper.find("form").trigger("submit.prevent");
+
+        expect(wrapper.find(".result").text()).toBe("Registration submitted");
+      });
+    });
+  });
+});
